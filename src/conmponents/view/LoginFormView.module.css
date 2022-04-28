@@ -1,0 +1,27 @@
+.nav{
+    margin: 2rem 0 0;
+    padding: 0 3rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+}
+
+.form__login{
+    display: flex;
+    align-items: center;
+}
+
+.login__btn{
+    align-self: center;
+    background: none;
+    border: none;
+    background-color: rgb(204, 204, 204);
+    padding: .6rem 1.5rem;
+    border-radius: 4rem;
+    cursor: pointer;
+}
+
+.login__btn:hover{
+  background-color: rgb(219, 219, 219);
+}
+

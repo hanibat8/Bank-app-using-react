@@ -1,0 +1,38 @@
+.bank__operation__heading{
+    font-size: 1.6rem;
+    margin-bottom: 1.4rem;
+}
+
+.bank__operation:not(:last-of-type){
+    margin-bottom: 3rem;
+}
+
+.bank__operation-form__input{
+   display: inline-block;
+   height: 2.5rem;
+   border-radius: 5px;
+   border: none;
+   width: 100%;
+   background-color: rgba(255, 255, 255, 0.4);
+}
+
+.bank__operation-form__btn{
+   height: 2.2rem;
+   border-radius: 5px;
+   border: none;
+   background: #fff;
+   cursor: pointer;
+}
+
+.bank__operation-form__label{
+    font-size: 1.3rem;
+    justify-self: center;
+}
+
+.error{
+    color: rgb(196, 61, 61);
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-right: 2rem;
+    margin-bottom: .5rem;
+}
