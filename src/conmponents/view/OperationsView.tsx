@@ -27,7 +27,7 @@ const OperationsView:React.FC<Props>=(props)=>{
     const onFormSubmit=(e:any)=>{
         e.preventDefault();
         
-        if(input.amount==='' || input?.recipient==='' || isNaN(+input.amount)){
+        if( input?.amount==='' || (input?.recipient && (input?.recipient==='' || !input?.recipient?.includes('@')) ) ){
             setError('Please enter a valid value');
             setInput(props.initialInputState);
             return;

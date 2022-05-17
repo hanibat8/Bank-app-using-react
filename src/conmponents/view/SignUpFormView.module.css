@@ -25,5 +25,12 @@
   background-color: rgb(219, 219, 219);
 }
 
+.error{
+    color: rgb(196, 61, 61);
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-right: 2rem;
+    margin-bottom: .5rem;
+}
 
 
