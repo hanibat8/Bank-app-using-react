@@ -76,6 +76,8 @@ const HomeController=()=>{
     const mutateMovementsArr=(dataSnapshotMovementArr:string[],movementMutationArr:string[],amount:number,sign:string)=>{
         
         let arr=movementMutationArr ? movementMutationArr : dataSnapshotMovementArr
+        if(!arr)
+            arr=[];
         arr.push(`${sign}${amount}`);
         return arr;
     }
