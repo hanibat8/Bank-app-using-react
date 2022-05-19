@@ -57,7 +57,7 @@ const HomeController=()=>{
             
     },[currentUserSnapshot.isSuccess]);
 
-    //functionality to set loan pending after 5 mins of loan request or after every loan installment paid
+    //functionality to set loan pending after 3 mins of loan request or after every loan installment paid
     useEffect(() => {
         //console.log(+currentUserMutation.variables?.loan,+currentUserSnapshot.data?.val().loan);
         let loan=(+currentUserMutation.variables?.loan) ? (+currentUserMutation.variables?.loan) : (+currentUserSnapshot.data?.val().loan);
@@ -65,7 +65,7 @@ const HomeController=()=>{
         let timer=setTimeout(() =>{
             if(loan>0){
                 return setIsLoanPending(true)
-            }},5*60*1000)
+            }},3*60*1000)
     
         return () => {
             clearTimeout(timer);
