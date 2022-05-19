@@ -10,7 +10,7 @@ import LoadingSpinner from './conmponents/view/LoadingSpinner';
 const App:React.FC=()=>{
   
   const user = useAuthUser(["user"], auth);
-  //console.log(user.)
+  console.log(user)
   //const [loanPending,setLoanPending]=useState(false);
 
   return (

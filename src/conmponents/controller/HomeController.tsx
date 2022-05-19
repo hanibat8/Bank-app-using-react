@@ -25,9 +25,6 @@ const HomeController=()=>{
         subscribe: true,
     });
 
-    console.log(currentUserSnapshot.data?.val()?.movements);
-    console.log(+currentUserSnapshot.data?.val().loan)
-
     //to access all users data for transfer functionality
     const usersDbRef = ref(db, `users/`);
     const usersSnapshot = useDatabaseSnapshot(["users",user.data?.uid], usersDbRef, {
@@ -39,6 +36,9 @@ const HomeController=()=>{
 
     //setting transferRecipient as state so below code can work
     const [transferRecipient,setTransferRecipient]=useState<{recipient:string,amount:number}>({recipient:'',amount:0});
+
+    //setting transferRecipient as state so below code can work
+    const [reAuthenticationNeeded,setReAuthenticationNeeded]=useState(false);
 
     //to access and mutate transfer recipient data
     const recipientDbRef = ref(db, `users/${transferRecipient.recipient}`);
@@ -59,9 +59,9 @@ const HomeController=()=>{
 
     //functionality to set loan pending after 5 mins of loan request or after every loan installment paid
     useEffect(() => {
-        console.log(+currentUserMutation.variables?.loan,+currentUserSnapshot.data?.val().loan);
+        //console.log(+currentUserMutation.variables?.loan,+currentUserSnapshot.data?.val().loan);
         let loan=(+currentUserMutation.variables?.loan) ? (+currentUserMutation.variables?.loan) : (+currentUserSnapshot.data?.val().loan);
-        console.log(loan);
+        //console.log(loan);
         let timer=setTimeout(() =>{
             if(loan>0){
                 return setIsLoanPending(true)
@@ -97,17 +97,17 @@ const HomeController=()=>{
     },[transferRecipient.recipient, recipientSnapshot.isSuccess]);
 
     useEffect(()=>{
-        
-        user.data?.delete().then((res:any) => {
-            // User deleted.
-            let data=res.data;
-            console.log(data)
-            //mutationLogout.mutate();
-          }).catch((error:any) => {
-            return error.message;
-        });
+        if(reAuthenticationNeeded)
+            user.data?.delete().then((res:any) => {
+                // User deleted.
+                let data=res.data;
+                //console.log(data)
+                //mutationLogout.mutate();
+            }).catch((error:any) => {
+                return error.message;
+            });
 
-    },[reauthenticateMutation.isSuccess])
+    },[reauthenticateMutation.isSuccess,reAuthenticationNeeded])
 
     const checkTransferRecipientExists=(recipient:string,user:{name:string},userID:string)=>{
         return {'exists':user.name.includes(recipient),'user':userID}};
@@ -149,7 +149,7 @@ const HomeController=()=>{
     }
 
     const onRequestLoan=(params:{amount:number})=>{
-        console.log(+currentUserSnapshot.data?.val()?.loan,+currentUserSnapshot.data?.val()?.loan>0);
+        //console.log(+currentUserSnapshot.data?.val()?.loan,+currentUserSnapshot.data?.val()?.loan>0);
         if(isNaN(+params.amount))
             return 'Please submit appropriate amount';
 
@@ -179,7 +179,7 @@ const HomeController=()=>{
         let currentDate=new Date();
         let loanAmount=(+currentUserSnapshot.data?.val().loan) - (+params.amount)>0 ? (+currentUserSnapshot.data?.val().loan) - (+params.amount) : 0;
         let movementsArr=mutateMovementsArr(currentUserSnapshot.data?.val()?.movements,currentUserMutation?.variables?.movements,params.amount,'-');
-        console.log(loanAmount,+currentUserSnapshot.data?.val().loan,(+currentUserSnapshot.data?.val().loan) - (+params.amount),(+currentUserSnapshot.data?.val().loan) - (+params.amount)>0)
+        //console.log(loanAmount,+currentUserSnapshot.data?.val().loan,(+currentUserSnapshot.data?.val().loan) - (+params.amount),(+currentUserSnapshot.data?.val().loan) - (+params.amount)>0)
         writeDataToDB(currentUserMutation,currentUserSnapshot,movementsArr,
             +loanAmount.toFixed(2),+currentUserSnapshot.data?.val().installments+1,currentDate,
             +((+currentUserSnapshot.data?.val()?.balance) - params.amount).toFixed(2),
@@ -200,7 +200,7 @@ const HomeController=()=>{
             credential: EmailAuthProvider.credential(user.data?.email,password)})
         }
         catch(error){
-            console.log(error)
+            //console.log(error)
             return error;
         }
     }
@@ -208,9 +208,9 @@ const HomeController=()=>{
     const onCloseAccount=(params:{recipient:string,amount:string})=>{
         
         let {recipient:email,amount:password}=params;
-        console.log(user?.data?.email,email);
+        //console.log(user?.data?.email,email);
         let userExists=user?.data?.email==email;
-        console.log(userExists);
+        //console.log(userExists);
         
         if(!userExists)
             return 'Invalid email address';
@@ -223,9 +223,10 @@ const HomeController=()=>{
         user.data?.delete().then((res:any) => {
             // User deleted.
             let data=res.data;
-            console.log(data)
+            //console.log(data)
 
           }).catch((error:any) => {
+            setReAuthenticationNeeded(true);
             console.log(error.message)
             let errMsg:any;
             
@@ -246,7 +247,7 @@ const HomeController=()=>{
 
 
     if(((currentUserSnapshot.isSuccess && !(!!currentUserMutation.variables)) || currentUserMutation.isSuccess) && user.isSuccess){
-       console.log(currentUserSnapshot.data?.val().movements,!(!!currentUserMutation.variables),currentUserMutation.variables,currentUserMutation.isSuccess, user.isSuccess)
+       console.log(((currentUserSnapshot.isSuccess && !(!!currentUserMutation.variables)) || currentUserMutation.isSuccess), user.isSuccess)
         return(
             <Home onTransferAmount={onTransferAmount} 
                   onRequestLoan={onRequestLoan} 

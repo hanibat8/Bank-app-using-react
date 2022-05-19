@@ -52,7 +52,7 @@ const SignUpFormView=(props:any)=>{
                     });*/
                     props.onSubmitHandler(values.email,values.password).then((userCredential:any) => {
                         setSubmitting(false);
-                        props.addUserToDB(userCredential.user.uid,values.email);
+                        //props.addUserToDB(userCredential.user.uid,values.email);
                         navigate('/home');
                       
                     }).catch((err:any)=>{
