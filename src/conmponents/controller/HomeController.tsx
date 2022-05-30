@@ -2,11 +2,11 @@ import React,{ useState, useEffect } from 'react';
 import Home from '../view/Home';
 import LoadingSpinner from '../view/LoadingSpinner';
 import { useDatabaseUpdateMutation,useDatabaseSnapshot  } from "@react-query-firebase/database";
-import { useAuthUser,useAuthSignOut,useAuthDeleteUser,useAuthReauthenticateWithCredential } from "@react-query-firebase/auth";
+import { useAuthUser,useAuthSignOut,useAuthReauthenticateWithCredential } from "@react-query-firebase/auth";
 import { ref } from "firebase/database";
 import { db } from '../../firebase-config';
 import { auth } from '../../firebase-config';
-import {EmailAuthProvider} from 'firebase/auth';
+import { EmailAuthProvider } from 'firebase/auth';
 
 const HomeController=()=>{
     //current user

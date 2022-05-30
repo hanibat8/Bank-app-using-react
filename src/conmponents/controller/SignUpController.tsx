@@ -25,7 +25,7 @@ const SignUpController=()=>{
        return createUserWithEmailAndPassword(auth,emailVal,passVal).then((data)=>{
                                                                         console.log(data)
                                                                         addUserToDB(data.user.uid,data.user.email)})
-                                                                    .catch((err)=>console.log(err));
+                                                                    .catch((err)=>{throw err});
     };
 
     console.log(mutation);

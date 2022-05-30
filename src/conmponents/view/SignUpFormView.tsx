@@ -3,6 +3,7 @@ import Input from './InputView';
 import classes from './SignUpFormView.module.css';
 import {useNavigate,Link } from 'react-router-dom';
 //import {renderResponseItem} from '../utils/util';
+import LoadingSpinner from './LoadingSpinner';
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
@@ -51,15 +52,16 @@ const SignUpFormView=(props:any)=>{
                       },
                     });*/
                     props.onSubmitHandler(values.email,values.password).then((userCredential:any) => {
-                        setSubmitting(false);
                         //props.addUserToDB(userCredential.user.uid,values.email);
+                        console.log(userCredential);
                         navigate('/home');
                       
                     }).catch((err:any)=>{
+                        console.log('here');
                         setError(err.message);
-                    })
+                        
+                    }).finally(()=>setSubmitting(false))
                 
-                    //!error && !isLoading && setSubmitting(false);
                 }}>
                 {formik => {
                     return (
@@ -70,19 +72,24 @@ const SignUpFormView=(props:any)=>{
                                     label="Email Address"
                                     name="email"
                                     type="email"
+                                
                                 />
                                 <Input
                                     label="Password"
                                     name="password"
-                                    type="password"       
+                                    type="password"
+                                    placeholder='Password' 
+                                  
                                 />
                                 <Input
                                     label="Confirm Password"
                                     name="confirmPassword"
-                                    type="password"       
+                                    type="password"  
+                                    
                                 />
-                                {(formik.isSubmitting || error) /*&& renderResponseItem(formik.isSubmitting,error)*/}
-                                {!formik.isSubmitting && <button type="submit" disabled={!formik.isValid || formik.isSubmitting} className={classes['login__btn']}>Sign Up</button>}
+                                {(formik.isSubmitting) && <LoadingSpinner/>}
+                                {(error) && <span className={classes['error']}>{error}</span>}
+                                {!formik.isSubmitting && <button type="submit" disabled={!formik.isValid || formik.isSubmitting } className={classes['login__btn']}>Sign Up</button>}
                             </Form>
                             <Link to='/'>Have an account? Login</Link>
                         </nav>

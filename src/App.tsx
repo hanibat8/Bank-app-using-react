@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import {Route,Routes,Navigate} from 'react-router-dom';
+import React from 'react';
+import { Route,Routes,Navigate } from 'react-router-dom';
 import { useAuthUser } from "@react-query-firebase/auth";
-import {auth} from './firebase-config';
+import { auth } from './firebase-config';
 import LoginController from './conmponents/controller/LoginController';
 import SignUpController from './conmponents/controller/SignUpController';
 import HomeController from './conmponents/controller/HomeController';
