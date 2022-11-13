@@ -120,7 +120,7 @@ const HomeController=()=>{
         let transferRecipientExistObj;
         for (const user in usersSnapshot.data?.val()) {
             transferRecipientExistObj=checkTransferRecipientExists(params.recipient.split('@')[0],usersSnapshot.data?.val()[user],user);
-            if(transferRecipientExistObj.exists)
+            if(!transferRecipientExistObj.exists)
                 break;
         }
 
