@@ -31,7 +31,7 @@ const Home=(props:any)=>{
                     <h2 className={classes["loan__label"]}>Pending Loan</h2>
                     <h1 className={classes["loan__value"]}>{`$${props.bankObj.loan?props.bankObj.loan:0}`}</h1>
                 </div>
-                {props.isLoanPending && <p className={classes['error']}>Loan installment due. Each installment of ${props.bankObj.monthlyPayment} or more</p>}
+                {props.isLoanPending && <p className={classes['error']}>Loan installment due. Each installment of ${props.bankObj.monthlyPayment} or more.<br/> Please submit pending installment to access other features.</p>}
                 <div className={classes["bank"]}>
                     <div className={classes["bank__transactions"]}>
                         {movementsContent}                        

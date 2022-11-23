@@ -59,6 +59,7 @@ const HomeController=()=>{
 
     //functionality to set loan pending after 3 mins of loan request or after every loan installment paid
     useEffect(() => {
+        console.log(currentUserSnapshot.data)
         //console.log(+currentUserMutation.variables?.loan,+currentUserSnapshot.data?.val().loan);
         let loan=(+currentUserMutation.variables?.loan) ? (+currentUserMutation.variables?.loan) : (+currentUserSnapshot.data?.val().loan);
         //console.log(loan);
@@ -112,6 +113,7 @@ const HomeController=()=>{
     },[reauthenticateMutation.isSuccess,reAuthenticationNeeded])
 
     const checkTransferRecipientExists=(recipient:string,user:{name:string},userID:string)=>{
+        console.log(user.name.includes(recipient),recipient,user.name)
         return {'exists':user.name.includes(recipient),'user':userID}};
         
     //functionality to transfer money from user to a recipient
@@ -119,10 +121,13 @@ const HomeController=()=>{
         
         let transferRecipientExistObj;
         for (const user in usersSnapshot.data?.val()) {
+            console.log(user)
             transferRecipientExistObj=checkTransferRecipientExists(params.recipient.split('@')[0],usersSnapshot.data?.val()[user],user);
-            if(!transferRecipientExistObj.exists)
+            if(transferRecipientExistObj.exists)
                 break;
         }
+
+        console.log(transferRecipientExistObj,params.recipient)
 
         if(!transferRecipientExistObj?.exists || user.data?.email==params.recipient)
             return 'User doesn\'t exists';

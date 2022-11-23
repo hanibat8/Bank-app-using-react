@@ -67,6 +67,11 @@ const LoginFormView=(props:any)=>{
                 }
             }
         </Formik>
+        <div className='testing'>
+            <p>Test application using these credentials</p> 
+            <p>Email: test23@gmail.com  Password: test23</p>
+            <p>Email: test25@gmail.com  Password: test25</p>
+        </div>
     </React.Fragment>
     )
 }
