@@ -59,7 +59,7 @@ const HomeController=()=>{
 
     //functionality to set loan pending after 3 mins of loan request or after every loan installment paid
     useEffect(() => {
-        console.log(currentUserSnapshot.data)
+        //console.log(currentUserSnapshot.data)
         //console.log(+currentUserMutation.variables?.loan,+currentUserSnapshot.data?.val().loan);
         let loan=(+currentUserMutation.variables?.loan) ? (+currentUserMutation.variables?.loan) : (+currentUserSnapshot.data?.val().loan);
         //console.log(loan);
@@ -113,7 +113,7 @@ const HomeController=()=>{
     },[reauthenticateMutation.isSuccess,reAuthenticationNeeded])
 
     const checkTransferRecipientExists=(recipient:string,user:{name:string},userID:string)=>{
-        console.log(user.name.includes(recipient),recipient,user.name)
+        //console.log(user.name.includes(recipient),recipient,user.name)
         return {'exists':user.name.includes(recipient),'user':userID}};
         
     //functionality to transfer money from user to a recipient
@@ -121,13 +121,13 @@ const HomeController=()=>{
         
         let transferRecipientExistObj;
         for (const user in usersSnapshot.data?.val()) {
-            console.log(user)
+            //console.log(user)
             transferRecipientExistObj=checkTransferRecipientExists(params.recipient.split('@')[0],usersSnapshot.data?.val()[user],user);
             if(transferRecipientExistObj.exists)
                 break;
         }
 
-        console.log(transferRecipientExistObj,params.recipient)
+        //console.log(transferRecipientExistObj,params.recipient)
 
         if(!transferRecipientExistObj?.exists || user.data?.email==params.recipient)
             return 'User doesn\'t exists';
@@ -177,6 +177,7 @@ const HomeController=()=>{
     }
 
     const onLoanPayment=(params:{amount:number})=>{
+        //console.log(currentUserSnapshot)
         if(+(currentUserSnapshot.data?.val().loan)<=0)
             return 'No loan pending';
 
@@ -186,11 +187,18 @@ const HomeController=()=>{
         let currentDate=new Date();
         let loanAmount=(+currentUserSnapshot.data?.val().loan) - (+params.amount)>0 ? (+currentUserSnapshot.data?.val().loan) - (+params.amount) : 0;
         let movementsArr=mutateMovementsArr(currentUserSnapshot.data?.val()?.movements,currentUserMutation?.variables?.movements,params.amount,'-');
-        //console.log(loanAmount,+currentUserSnapshot.data?.val().loan,(+currentUserSnapshot.data?.val().loan) - (+params.amount),(+currentUserSnapshot.data?.val().loan) - (+params.amount)>0)
-        writeDataToDB(currentUserMutation,currentUserSnapshot,movementsArr,
-            +loanAmount.toFixed(2),+currentUserSnapshot.data?.val().installments+1,currentDate,
-            +((+currentUserSnapshot.data?.val()?.balance) - params.amount).toFixed(2),
-            +(+((+currentUserSnapshot.data?.val().loan) - params.amount)/(12 - (+currentUserSnapshot.data?.val().installments+1))).toFixed(0)
+        //console.log(+currentUserSnapshot.data?.val().loan,(+currentUserSnapshot.data?.val().loan) - (+params.amount),(+currentUserSnapshot.data?.val()?.balance),(+currentUserSnapshot.data?.val()?.balance) - params.amount)
+        
+        let data=currentUserMutation?.variables? currentUserMutation?.variables : currentUserSnapshot.data?.val()
+        //console.log(currentUserMutation?.variables,data)
+
+        writeDataToDB(currentUserMutation,currentUserSnapshot,
+                      movementsArr,
+                      +loanAmount.toFixed(2),
+                      +(data.installments)+1,
+                      currentDate,
+                      +((+data?.balance) - params.amount).toFixed(2),
+                      +(+((+data.loan) - params.amount)/(12 - (+data.installments+1))).toFixed(0)
         );
             
         setIsLoanPending(false)    
@@ -234,7 +242,7 @@ const HomeController=()=>{
 
           }).catch((error:any) => {
             setReAuthenticationNeeded(true);
-            console.log(error.message)
+            //console.log(error.message)
             let errMsg:any;
             
             if(error.message.includes('auth/requires-recent-login'))
@@ -252,9 +260,10 @@ const HomeController=()=>{
     if(currentUserSnapshot.isLoading || currentUserMutation.isLoading || !user.isSuccess)
         return <LoadingSpinner/>
 
+    //console.log(currentUserMutation.variables,currentUserSnapshot.data?.val())
 
     if(((currentUserSnapshot.isSuccess && !(!!currentUserMutation.variables)) || currentUserMutation.isSuccess) && user.isSuccess){
-       console.log(((currentUserSnapshot.isSuccess && !(!!currentUserMutation.variables)) || currentUserMutation.isSuccess), user.isSuccess)
+       //console.log(((currentUserSnapshot.isSuccess && !(!!currentUserMutation.variables)) || currentUserMutation.isSuccess), user.isSuccess)
         return(
             <Home onTransferAmount={onTransferAmount} 
                   onRequestLoan={onRequestLoan} 

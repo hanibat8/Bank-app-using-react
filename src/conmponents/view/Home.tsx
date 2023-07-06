@@ -4,11 +4,11 @@ import OperationsView from './OperationsView';
 
 const Home=(props:any)=>{
 
-    console.log('home view',props.bankObj)
+    //console.log('home view',props.bankObj)
 
-    let movementsContent=props.bankObj.movements?.map((move:string)=>{
+    let movementsContent=props.bankObj.movements?.map((move:string,index:number)=>{
         let totalClasses=+move>0?`${classes['bank__transaction--row--action']} ${classes['bank__transaction--row--action--deposit']}`:`${classes['bank__transaction--row--action']} ${classes['bank__transaction--row--action--withdrawal']}`;
-        return  <div className={classes["bank__transaction--row"]}>
+        return  <div key={index} className={classes["bank__transaction--row"]}>
             <span className={totalClasses}>{+move>0?'DEPOSIT':'WITHDRAWAL'}</span>
             <span className={classes['bank__transaction--row--amount']}>{`$${move}`}</span>
         </div>
